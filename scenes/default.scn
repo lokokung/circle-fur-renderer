@@ -1,0 +1,54 @@
+// Default scene
+
+camera = {
+    px = 0.0;
+    py = 0.0;
+    pz = 10.0;
+
+    near = 0.1;
+    far = 500.0;
+    fov = 60.0;
+    aspect = 1.0;
+};
+
+light = {
+    px = 5.0;
+    py = 5.0;
+    pz = 10.0;
+
+    r = 0.8;
+    g = 0.8;
+    b = 0.8
+    k = 0.0;
+};
+
+sphere = {
+    // Position
+    px = 0.0;
+    py = 0.0;
+    pz = 0.0;
+
+    // Radius of sphere
+    radius = 2.0;
+
+    // Length of hair
+    hair_length = 1.0;
+
+    // Diffuse color
+    rd = 0.8;
+    gd = 0.8;
+    bd = 0.0;
+
+    // Specular color
+    rs = 0.2;
+    gs = 0.2;
+    bs = 0.2;
+
+    // Ambient color
+    ra = 0.2;
+    ga = 0.2;
+    ba = 0.0;
+
+    // Phong exponent
+    p = 5.0
+};
