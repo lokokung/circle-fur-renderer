@@ -2,6 +2,8 @@
 
 #include <libconfig.h++>
 
+#include <vector>
+
 #include "camera.hpp"
 #include "light.hpp"
 #include "logger.hpp"
@@ -9,14 +11,15 @@
 
 class Scene {
 public:
-    Light* light;
+    std::vector<Light*> lights;
     Camera* camera;
     Sphere* sphere;
 
-    Scene(Light* light, Camera* camera, Sphere* sphere);
+    Scene(Camera* camera, Sphere* sphere);
     Scene(const char* scene_file = "scenes/default.scn");
     ~Scene();
+    void add_light(Light* light);
 
 private:
-    void construct(Light* light, Camera* cameran, Sphere* sphere);
+    void construct(Camera* camera, Sphere* sphere);
 };

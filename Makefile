@@ -3,7 +3,7 @@
 GPP = g++
 FLAGS = -g -Wall -D_REENTRANT -std=c++0x -pthread
 INCLUDE = -isystem include -I /usr/include
-LIBS = -lconfig++ -lpng
+LIBS = -lconfig++ -lpng -lnoise
 
 DIR_PATHS = bin obj
 

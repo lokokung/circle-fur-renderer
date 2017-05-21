@@ -20,7 +20,14 @@ int main(int argc, char* argv[]) {
     // INFO("Solutions: {0}, {1}", t1, t2);
 
     Raytracer raytracer;
-    raytracer.raytrace_base(scene, 1000, 1000, "test.png");
+    raytracer.raytrace_hair(scene, 1000, 1000, "test.png");
+
+    // Eigen::Vector3f point;
+    // point << 0.0, -2.0, 0.0;
+    // float theta, phi;
+    // scene->sphere->spherical_coord(point, &theta, &phi);
+    // INFO("Theta: {0}", theta);
+    // INFO("Phi: {0}", phi);
     
     return 0;
 }

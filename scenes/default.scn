@@ -11,16 +11,28 @@ camera = {
     aspect = 1.0;
 };
 
-light = {
-    px = 5.0;
-    py = 5.0;
-    pz = 10.0;
+lights = (
+    {
+        px = 5.0;
+        py = 5.0;
+        pz = 5.0;
 
-    r = 0.8;
-    g = 0.8;
-    b = 0.8
-    k = 0.0;
-};
+        r = 0.9;
+        g = 0.9;
+        b = 0.9;
+        k = 0.8;
+    },
+    {
+        px = 5.0;
+        py = -5.0;
+        pz = 5.0;
+
+        r = 0.9;
+        g = 0.9;
+        b = 0.9;
+        k = 0.8;
+    }
+);
 
 sphere = {
     // Position
@@ -32,22 +44,23 @@ sphere = {
     radius = 2.0;
 
     // Length of hair
-    hair_length = 1.0;
+    hair_length = 0.5;
+    hair_atten = 0.001;
 
     // Diffuse color
-    rd = 0.8;
-    gd = 0.8;
-    bd = 0.0;
+    rd = 0.0;
+    gd = 0.5;
+    bd = 1.0;
 
     // Specular color
-    rs = 0.2;
-    gs = 0.2;
-    bs = 0.2;
+    rs = 0.0;
+    gs = 0.25;
+    bs = 0.5;
 
     // Ambient color
-    ra = 0.2;
-    ga = 0.2;
-    ba = 0.0;
+    ra = 0.175;
+    ga = 0.0875;
+    ba = 0.025;
 
     // Phong exponent
     p = 5.0
