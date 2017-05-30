@@ -7,9 +7,9 @@
 #include <libnoise/noise.h>
 
 #include "logger.hpp"
-#include "sphere.hpp"
+#include "../cuda/sphere.cuh"
 
-#define STEP_SIZE 0.01
+#define STEP_SIZE 0.005
 #define TILING 512
 #define EXPAND 10.0
 

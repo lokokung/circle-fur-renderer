@@ -1,13 +1,17 @@
 #pragma once
 
-#include <libconfig.h++>
-
 #include <vector>
 
-#include "camera.hpp"
-#include "light.hpp"
+#include "../cuda/camera.cuh"
+#include "../cuda/light.cuh"
+#include "../cuda/sphere.cuh"
+
+#ifndef __CUDACC__
+
+#include <libconfig.h++>
 #include "logger.hpp"
-#include "sphere.hpp"
+
+#endif
 
 class Scene {
 public:

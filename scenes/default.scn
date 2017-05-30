@@ -48,14 +48,14 @@ sphere = {
     hair_atten = 0.001;
 
     // Diffuse color
-    rd = 0.0;
-    gd = 0.5;
-    bd = 1.0;
+    rd = 0.7;
+    gd = 0.7;
+    bd = 0.7;
 
     // Specular color
-    rs = 0.0;
-    gs = 0.25;
-    bs = 0.5;
+    rs = 0.6;
+    gs = 0.6 ;
+    bs = 0.6;
 
     // Ambient color
     ra = 0.175;

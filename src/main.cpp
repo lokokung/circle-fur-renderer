@@ -1,5 +1,6 @@
 #include "logger.hpp"
 #include "raytracer.hpp"
+#include "../cuda/gpu_raytracer.cuh"
 #include "scene.hpp"
 
 int main(int argc, char* argv[]) {
@@ -19,8 +20,8 @@ int main(int argc, char* argv[]) {
     //                               &t1, &t2);
     // INFO("Solutions: {0}, {1}", t1, t2);
 
-    Raytracer raytracer;
-    raytracer.raytrace_hair(scene, 1000, 1000, "test.png");
+    GPURaytracer raytracer;
+    raytracer.raytrace_base(scene, 1000, 1000, "imgs/test.png");
 
     // Eigen::Vector3f point;
     // point << 0.0, -2.0, 0.0;
