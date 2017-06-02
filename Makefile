@@ -11,7 +11,7 @@ DIR_PATHS = bin obj
 
 # CUDA Compiler and Flags
 NVCC = nvcc
-CUDA_FLAGS = -m64 -dc -Wno-deprecated-gpu-targets --std=c++11
+CUDA_FLAGS = -g -m64 -dc -Wno-deprecated-gpu-targets --std=c++11
 CUDA_INCLUDE = -I /usr/local/cuda/include -I /usr/include -I /usr/include/eigen3
 CUDA_LIBS = 
 CUDA_GENCODES = -gencode arch=compute_20,code=sm_20 \
@@ -26,7 +26,6 @@ CUDA_GENCODES = -gencode arch=compute_20,code=sm_20 \
 CUDA_FILES = $(wildcard cuda/*.cu)
 
 # CUDA Object Files
-# CUDA_OBJ_FILES = $(addprefix obj/, $(notdir $(CUDA_FILES:.cu=.o)))
 CUDA_OBJ_FILES = $(addprefix obj/, $(notdir $(addsuffix .o, $(CUDA_FILES))))
 
 # ------------------------------------------------------------------------------
@@ -39,14 +38,14 @@ CUDA_LINK_FLAGS = -dlink -Wno-deprecated-gpu-targets
 # C++ Compiler and Flags
 GPP = g++
 FLAGS = -g -Wall -D_REENTRANT -std=c++0x -pthread
-INCLUDE = -isystem include -I /usr/include -I /usr/include/eigen3
+INCLUDE = -isystem include -I /usr/include -I /usr/include/eigen3 \
+	  -I /usr/local/cuda/include
 LIBS = -lconfig++ -lpng -lnoise -L/usr/local/cuda/lib64 -lcudart
 
 # C++ Source Files
 CPP_FILES = $(wildcard src/*.cpp)
 
 # C++ Object Files
-# OBJ_FILES = $(addprefix obj/, $(notdir $(CPP_FILES:.cpp=.o)))
 OBJ_FILES = $(addprefix obj/, $(notdir $(addsuffix .o, $(CPP_FILES))))
 
 
@@ -75,6 +74,10 @@ obj/%.cpp.o: src/%.cpp | dir
 # Compile CUDA Source Files
 obj/%.cu.o: cuda/%.cu | dir
 	$(NVCC) $(CUDA_FLAGS) $(CUDA_GENCODES) -c -o $@ $(CUDA_INCLUDE) $<
+
+src: $(OBJ_FILES)
+
+cuda: $(CUDA_OBJ_FILES) $(CUDA_OBJ)
 
 # Clean everything including temporary Emacs files
 clean:

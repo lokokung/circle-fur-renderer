@@ -24,8 +24,8 @@ void Sphere::spherical_coord(Eigen::Vector3f point, float* theta, float* phi) {
     // *phi = std::acos(point(2, 0) / radius);
     // *theta = std::atan2(point(1, 0), point(0, 0));
 
-    *phi = std::acos(point(1, 0) / radius);
-    *theta = std::atan2(point(2, 0), point(0, 0));
+    *phi = acosf(point(1, 0) / radius);
+    *theta = atan2f(point(2, 0), point(0, 0));
 }
 
 int Sphere::intersect_sphere(Eigen::Vector3f start, Eigen::Vector3f direction,

@@ -21,7 +21,8 @@ int main(int argc, char* argv[]) {
     // INFO("Solutions: {0}, {1}", t1, t2);
 
     GPURaytracer raytracer;
-    raytracer.raytrace_base(scene, 1000, 1000, "imgs/test.png");
+    // Raytracer raytracer;
+    raytracer.raytrace_hair(scene, 1000, 1000, "imgs/test.png");
 
     // Eigen::Vector3f point;
     // point << 0.0, -2.0, 0.0;

@@ -9,8 +9,8 @@
 #include "logger.hpp"
 #include "../cuda/sphere.cuh"
 
-#define STEP_SIZE 0.005
-#define TILING 512
+#define STEP_SIZE 0.02
+#define TILING 256
 #define EXPAND 10.0
 
 #define RANDF(min, max) min + ((float) rand() / RAND_MAX) * (max - min)

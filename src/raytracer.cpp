@@ -113,11 +113,6 @@ void Raytracer::raytrace_hair(Scene* scene, int xres, int yres,
     PNGMaker png(xres, yres);
     // Seed random number generator
     srand(time(0));
-    // Set up procedural noise generator
-    noise::module::Perlin x_noise;
-    noise::module::Perlin y_noise;
-    x_noise.SetSeed(time(0));
-    y_noise.SetSeed(time(0));
 
     // Define maximum color
     Eigen::Vector3f max_color;
@@ -142,11 +137,10 @@ void Raytracer::raytrace_hair(Scene* scene, int xres, int yres,
     // Get position of the sphere
     Eigen::Vector3f sp = scene->sphere->position;
     // Get color vectors of the sphere
-    Eigen::Vector3f diffuse, specular, ambient;
+    Eigen::Vector3f diffuse, specular;
     float p = scene->sphere->p;
     diffuse = scene->sphere->diffuse;
     specular = scene->sphere->specular;
-    ambient = scene->sphere->ambient;
 
     // Iterate the pixel grid
     for (int i = 0; i < xres; ++i) {
@@ -180,7 +174,7 @@ void Raytracer::raytrace_hair(Scene* scene, int xres, int yres,
                 float t_max = std::min(t_minus_base, t_plus_hair);
 
                 // Initialize colors for the algorithm
-                Eigen::Vector3f ldiffuse, lspecular, lambient;
+                Eigen::Vector3f ldiffuse, lspecular;
                 ldiffuse << 0.0, 0.0, 0.0;
                 lspecular << 0.0, 0.0, 0.0;
 
@@ -221,7 +215,6 @@ void Raytracer::raytrace_hair(Scene* scene, int xres, int yres,
                         // Apply light distance attenuation
                         Eigen::Vector3f lc_atten =
                             lc / (1.0 + k * distance * distance);
-                        lambient = lc_atten;
 
                         // Compute density at the point
                         float rho = futils.fur_density(scene->sphere, t_base,
@@ -256,7 +249,6 @@ void Raytracer::raytrace_hair(Scene* scene, int xres, int yres,
                 Eigen::Vector3f color =
                     diffuse.cwiseProduct(ldiffuse) +
                     specular.cwiseProduct(lspecular);
-                    // ambient.cwiseProduct(lambient);
                 color = color.cwiseMin(max_color);
 
                 // INFO("RGB: {0}, {1}, {2}", color(0, 0), color(1, 0), color(2, 0));
