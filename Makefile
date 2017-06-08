@@ -5,7 +5,7 @@ EXE_NAME = bin/furry_circle
 CUDA_OBJ = obj/device.o
 
 # Necessary directories
-DIR_PATHS = bin obj
+DIR_PATHS = bin obj imgs
 
 # ------------------------------------------------------------------------------
 

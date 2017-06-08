@@ -11,7 +11,7 @@ int main(int argc, char* argv[]) {
                            ' ', "1.0");
 
         // Set up arguments
-        TCLAP::ValueArg<std::string> input_file_arg("f", "input_file",
+        TCLAP::ValueArg<std::string> input_file_arg("i", "input_file",
                                                     "Input scene file",
                                                     false,
                                                     "scenes/default.scn",
