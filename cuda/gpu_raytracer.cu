@@ -84,14 +84,14 @@ __global__ void raytrace_base_kernel(Camera* camera, Light* light,
                 
             // Compute diffuse term for lighting
             ldiffuse +=
-                lc * fmaxf((float) 0.0, normal.dot(ld));
+                lc_atten * fmaxf((float) 0.0, normal.dot(ld));
 
             // Compute specular term for lighting
             Eigen::Vector3f edld = ld - direction;
             edld = edld / edld.norm();
             lspecular +=
-                lc * powf(fmaxf((float) 0.0,
-                                normal.dot(edld)), p);
+                lc_atten * powf(fmaxf((float) 0.0,
+                                      normal.dot(edld)), p);
                                    
             // Compute total color
             Eigen::Vector3f color =
@@ -249,9 +249,9 @@ __global__ void raytrace_hair_kernel(Camera* camera, Light* light,
         // Compute intersection between sphere and camera ray
         float t_minus_base = FLT_MAX;
         float t_plus_base = FLT_MAX;
-        sphere->intersect_base(cp, direction,
-                               &t_minus_base,
-                               &t_plus_base);
+        int base_res = sphere->intersect_base(cp, direction,
+                                              &t_minus_base,
+                                              &t_plus_base);
         // Compute intersection with hair volume
         float t_minus_hair = FLT_MAX;
         float t_plus_hair = FLT_MAX;
@@ -293,32 +293,31 @@ __global__ void raytrace_hair_kernel(Camera* camera, Light* light,
                 t_b /= t_b.norm();
                 // Compute point on sphere
                 Eigen::Vector3f t_base = t_b * sphere->radius;
-                // Compute vector from base to light and distance
-                Eigen::Vector3f t_l = lp - t_base;
-                float distance = t_l.norm();
-                t_l /= t_l.norm();
                 // Compute vector from base to camera
                 Eigen::Vector3f t_e = cp - t_base;
                 t_e /= t_e.norm();
-
-                // Apply light distance attenuation
-                Eigen::Vector3f lc_atten =
-                    lc / (1.0 + k * distance * distance);
-
+                
                 // Compute density at the point
                 float rho = (*futils)->fur_density(sphere, t_base,
                                                    TILING, EXPAND);
                 rho *= (t_high - t_low) / ((float) STEP_SIZE);
 
-                // Compute second light ray to handle shadowing
-                float shadow = (*futils)->fur_shadow(sphere, t_point,
-                                                     lp, &states[index],
-                                                     TILING, EXPAND);
-
                 // Compute transparency and increment density
                 float t_t = expf(-sphere->hair_atten * sum_rho);
                 sum_rho += rho;
                     
+                // Compute vector from base to light and distance
+                Eigen::Vector3f t_l = lp - t_base;
+                float distance = t_l.norm();
+                t_l /= t_l.norm();
+                // Apply light distance attenuation
+                Eigen::Vector3f lc_atten =
+                    lc / (1.0 + k * distance * distance);                
+
+                // Compute second light ray to handle shadowing
+                float shadow = (*futils)->fur_shadow(sphere, t_point,
+                                                     lp, &states[index],
+                                                     TILING, EXPAND);
                 // Compute scaled variables with density calculations
                 float t_factors = t_t * rho * shadow;
 
@@ -332,6 +331,44 @@ __global__ void raytrace_hair_kernel(Camera* camera, Light* light,
                          t_b.dot(t_e) +
                          t_b.cross(t_l).norm() *
                          t_b.cross(t_e).norm(), p);
+            }
+
+            // Check if we hit the surface
+            if (base_res > 1) {
+                // Compute point of intersection and normal
+                Eigen::Vector3f point = cp + t_minus_base * direction;
+                Eigen::Vector3f normal = point - sp;
+                normal = normal / normal.norm();
+
+                // Get light distance
+                Eigen::Vector3f ld = lp - point;
+                float distance = ld.norm();
+                ld = ld / ld.norm();
+
+                // Apply attenuation
+                Eigen::Vector3f lc_atten =
+                    lc / (1.0 + k * distance * distance);
+
+
+                // Compute transparency with respect to camera
+                float t_t = expf(-sphere->hair_atten * sum_rho);
+                
+                // Compute transparency and increment density
+                float shadow = (*futils)->fur_shadow(sphere, point,
+                                                     lp, &states[index],
+                                                     TILING, EXPAND);
+                shadow = powf(shadow, (float) STEP_SIZE);
+                
+                // Compute diffuse term for lighting
+                ldiffuse +=
+                    shadow * lc * fmaxf((float) 0.0, normal.dot(ld));
+
+                // Compute specular term for lighting
+                Eigen::Vector3f edld = ld - direction;
+                edld = edld / edld.norm();
+                lspecular +=
+                    shadow * lc * powf(fmaxf((float) 0.0,
+                                             normal.dot(edld)), p);
             }
 
             // Compute total color
